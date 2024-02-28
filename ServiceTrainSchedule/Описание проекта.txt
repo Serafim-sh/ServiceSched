@@ -1,0 +1,38 @@
+Сервис запускается на сервере Wildfly 
+подключение к базе данных прописан в файле application.properties
+
+
+Bearer token для авторизации в сервисе
+eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzZXJ2aWNlIGdkIiwiaWF0IjoxNzA4NjM1NjAwLCJleHAiOjE4MDMzMzAwMDB9.eb3t8a5d9xnN-kUF5gIjWMLZuGki7mCBtNM0tYdeVF6QJTS_bklh8sz5TveIdGtst7fCvlngB9VuhWKDu61XuA
+
+Запрос для получения расписания поездов метод GET
+http://127.0.0.1:8080/scheduler_gd/api/train_shedule?departurePoint=Липецк&destinationPoint=Москва&dateDeparture=2024-01-15
+
+{"TrainSchedule":
+  [
+    {"numberTrain":"145","nameTrain":"Победа","departurePoint":"Липецк Липецк","destinationPoint":"Павелецкий вокзал Москва","dateArrival":"2024-01-15 07:30:00","dateDeparture":"2024-01-15 13:00:00","listTrainWagons":[{"typeWagon":"Сидячий","plase":220,"priceTicketBeg":900.0,"priceTicketEnd":900.0}],"listTrainStation":[{"nameStation":"Липецк","dateDeparture":"2024-01-15 07:30:00"},{"nameStation":"Грязи-Воронежские","dateArrival":"2024-01-15 08:15:00","dateDeparture":"2024-01-15 08:43:00","parking":28},{"nameStation":"Мичуринск-Ворон","dateArrival":"2024-01-15 09:23:00","dateDeparture":"2024-01-15 09:26:00","parking":3},{"nameStation":"Богоявленск","dateArrival":"2024-01-15 09:58:00","dateDeparture":"2024-01-15 10:00:00","parking":2},{"nameStation":"Ряжск 1","dateArrival":"2024-01-15 10:33:00","dateDeparture":"2024-01-15 10:35:00","parking":2},{"nameStation":"Рязань 2","dateArrival":"2024-01-15 11:41:00","dateDeparture":"2024-01-15 11:46:00","parking":5},{"nameStation":"Павелецкий вокзал","dateArrival":"2024-01-15 13:00:00"}]},
+    {"numberTrain":"285И1","departurePoint":"Липецк Липецк","destinationPoint":"Павелецкий вокзал Москва","dateArrival":"2024-01-15 21:25:00","dateDeparture":"2024-01-17 06:18:00","listTrainWagons":[],"listTrainStation":[{"nameStation":"Владикавказ","dateDeparture":"2024-01-15 17:44:00"},{"nameStation":"Липецк","dateArrival":"2024-01-15 21:25:00","dateDeparture":"2024-01-15 21:30:00","parking":5},{"nameStation":"Елец","dateArrival":"2024-01-15 22:41:00","dateDeparture":"2024-01-15 23:12:00","parking":31},{"nameStation":"Ефремов","dateArrival":"2024-01-17 00:32:00","dateDeparture":"2024-01-17 00:34:00","parking":2},{"nameStation":"Узловая 1 (Московской ЖД)","dateArrival":"2024-01-17 02:16:00","dateDeparture":"2024-01-17 02:18:00","parking":2},{"nameStation":"Павелецкий вокзал","dateArrival":"2024-01-17 06:18:00"}]}
+  ]
+}
+
+Запрос для оформления билета метод POST
+http://127.0.0.1:8080/scheduler_gd/api/new_ticket_one
+{"numberTrain":"145", "numberWagons":"01", "seat":"26","familyName":"Testov", "FirstName":"Test", "patronymic":"Testovich", "gender":1, "birthDay":"1990-01-10", "docType":14, "docSer":"4210", "docNum":"010123", "ctznOksm":"rus"}
+Ответ
+{"Tickets": [{"registrationDate": "2024-01-15 07:30:00","numberTicket": "351329"}]}
+
+Запрос для отмены оформленного билета метод POST
+http://127.0.0.1:8080/scheduler_gd/api/ticket_refund
+
+{"numberTicket":"153991" }
+
+Запрос для групового оформления билетов метод POST
+http://127.0.0.1:8080/scheduler_gd/api/new_ticket_group
+
+[
+  {"numberTrain": "145","numberWagons": "01", "seat": "30", "familyName": "TestovTest", "FirstName": "Test", "patronymic": "Testikovih", "gender": 1, "birthDay": "1980-04-25", "docType": 14, "docSer": "4210", "docNum": "010125", "ctznOksm": "rus"},
+  {"numberTrain": "145","numberWagons": "01", "seat": "31", "familyName": "Testov1", "FirstName": "Test", "patronymic": "Testovich", "gender": 1, "birthDay": "1979-01-15", "docType": 14, "docSer": "4210", "docNum": "010124", "ctznOksm": "rus"}
+]
+
+Ответ 
+{"Tickets":[{"registrationDate":"2024-01-15 07:30:00","numberTicket":"284448"},{"registrationDate":"2024-01-15 07:30:00","numberTicket":"442929"}]}
